@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">UserInterface</string>
+    <string name="random_photo">Alcohol</string>
+    <string name="click_me">Click me</string>
+</resources>

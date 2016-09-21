@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">shortcut</string>
+    <string name="open_deliveries">Open deliveries</string>
+	<string-array name="options">
+		<item name="open_deliveries">Open Deliveries</item>
+		<item name="create_deliveries">Create Deliveries</item>
+	</string-array>
+</resources>
