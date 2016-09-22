@@ -24,9 +24,9 @@ public class DeliveryActivity extends ListActivity
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id)
 	{
-		super.onListItemClick(l, v, position, id);
-		Intent launchDetail = new Intent(this, DeliveryDetailsActivity.class);
-		launchDetail.putExtra(DeliveryDetailsActivity.DELIVERY_POSITION, id);
+//		super.onListItemClick(l, v, position, id);
+		Intent launchDetail = new Intent(DeliveryActivity.this, DeliveryDetailsActivity.class);
+		launchDetail.putExtra(DeliveryDetailsActivity.DELIVERY_POSITION, (int) id);
 		startActivity(launchDetail);
 		
 	}

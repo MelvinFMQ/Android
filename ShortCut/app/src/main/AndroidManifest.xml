@@ -20,7 +20,11 @@
             android:name=".DeliveryActivity"
             android:label="@string/open_deliveries" >
         </activity>
-		
+        <activity
+            android:name=".DeliveryDetailsActivity"
+            android:label="@string/open_deliveries" >
+        </activity>
+
 		
     </application>
 
