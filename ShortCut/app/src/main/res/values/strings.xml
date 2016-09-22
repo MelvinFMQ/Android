@@ -3,8 +3,11 @@
 
     <string name="app_name">shortcut</string>
     <string name="open_deliveries">Open deliveries</string>
-	<string-array name="options">
-		<item name="open_deliveries">Open Deliveries</item>
-		<item name="create_deliveries">Create Deliveries</item>
-	</string-array>
+    <string-array name="options">
+        <item name="open_deliveries">Open Deliveries</item>
+        <item name="create_deliveries">Create Deliveries</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

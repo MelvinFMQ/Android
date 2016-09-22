@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.melvinfoo.teleport.DetailTeleport">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/fragment_detail_teleport_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test"
+            android:textSize="@dimen/static_text_size"
+            />
+        <ImageView
+            android:id="@+id/fragment_detail_package_image"
+            android:layout_gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/miband"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="2">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From"
+                android:layout_marginEnd="@dimen/margin_size"
+                android:textSize="@dimen/static_text_size"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:id="@+id/fragment_detail_adress_to_send_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_size"
+                android:text="jurong"
+                android:textSize="@dimen/dynamic_text_size"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To"
+                android:layout_marginEnd="@dimen/margin_size"
+                android:textSize="@dimen/static_text_size"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:id="@+id/fragment_detail_teleport_adress_sent_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="amk"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weight"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:id="@+id/fragment_detail_teleport_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5kg"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

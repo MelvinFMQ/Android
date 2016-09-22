@@ -3,10 +3,16 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </fragment>
+<!--
     <ListView
 		android:id="@+id/cato_option"
         android:entries="@array/options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+-->
 
 </LinearLayout>
