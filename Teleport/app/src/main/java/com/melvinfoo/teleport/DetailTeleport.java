@@ -8,20 +8,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.*;
+import android.app.*;
+import android.content.*;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailTeleport extends Fragment {
+public class DetailTeleport extends Fragment{
 
     private int deliveryID;
+	private TitleSetter listener;
+	interface TitleSetter{
+		public void onTeleportSelected(String title);
+	}
 
     public DetailTeleport() {
         // Required empty public constructor
     }
 
+	@Override
+	public void onAttach(Context context)
+	{
+		// TODO: Implement this method
+		super.onAttach(context);
+		listener = (TitleSetter) context;
+		
+		
+	}
 
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,6 +46,13 @@ public class DetailTeleport extends Fragment {
         if (savedInstanceState != null){
             deliveryID = savedInstanceState.getInt("deliveryId");
         }
+		else{
+			Fragment stopwatch = new StopWatchFragment();
+			FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+			ft.replace(R.id.fragment_detail_teleportFrameLayout, stopwatch);
+			ft.addToBackStack(null);
+			ft.commit();
+		}
         return inflater.inflate(R.layout.fragment_detail_teleport, container, false);
     }
     @Override
@@ -44,10 +68,10 @@ public class DetailTeleport extends Fragment {
             sent_from.setText(selectedDelivery.getAddressSentFrom());
             TextView weight = (TextView) rootView.findViewById(R.id.fragment_detail_teleport_weight);
             weight.setText(String.valueOf(selectedDelivery.getPackageWeight()));
-            TextView title = (TextView) rootView.findViewById(R.id.fragment_detail_teleport_title);
-            title.setText(String.valueOf(selectedDelivery.getTitle()));
             ImageView packageImage = (ImageView) rootView.findViewById(R.id.fragment_detail_package_image);
             packageImage.setImageResource(selectedDelivery.getImageOfPackageId());
+			listener.onTeleportSelected(String.valueOf(selectedDelivery.getTitle()));
+			
         }
 
     }
