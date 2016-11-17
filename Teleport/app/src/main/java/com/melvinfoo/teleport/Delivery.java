@@ -7,19 +7,19 @@ public class Delivery {
     private String addressToSend;
     private String addressSentFrom;
 
-    public String getTitle() {
+    
+
+    private String title;
+    private int imageOfPackageId;
+    //in kg
+    private float packageWeight;
+	public String getTitle() {
         return title;
     }
 
     public float getPackageWeight() {
         return packageWeight;
     }
-
-    private String title;
-    private int imageOfPackageId;
-    //in kg
-    private float packageWeight;
-
 
     public final static Delivery[] Deliveries = {
             new Delivery("Miband", "angmokio", "gedong camp", R.drawable.miband, 0.5f),
