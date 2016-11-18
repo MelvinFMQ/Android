@@ -228,10 +228,10 @@ public class MainActivity extends Activity implements DeliveryListFragment.ListC
 	}
 
 	@Override
-	public void onItemClick(int position)
+	public void onItemClick(long id)
 	{
 		DetailTeleport newFragment = new DetailTeleport();
-		newFragment.setDeliveryID(position);
+		newFragment.setDeliveryID(id);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		ft.replace(R.id.content,newFragment);
 		ft.addToBackStack(null);
