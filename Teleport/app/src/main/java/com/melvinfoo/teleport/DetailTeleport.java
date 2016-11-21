@@ -51,13 +51,6 @@ public class DetailTeleport extends Fragment
         if (savedInstanceState != null){
             id = savedInstanceState.getLong("id");
         }
-		else{
-			Fragment stopwatch = new StopWatchFragment();
-			FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-			ft.replace(R.id.fragment_detail_teleportFrameLayout, stopwatch);
-			ft.addToBackStack(null);
-			ft.commit();
-		}
         return inflater.inflate(R.layout.fragment_detail_teleport, container, false);
     }
     @Override
