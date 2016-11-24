@@ -6,40 +6,51 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
+import android.os.AsyncTask;
 import android.app.FragmentTransaction;
 import android.content.Context;
+
+//GUI elememts
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.CheckBox;
+
+//SQL libs
 import com.melvinfoo.teleport.TeleportDatabaseHelper;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.content.ContentValues;
-import android.widget.Toast;
-import android.os.AsyncTask;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 
+
 public class DetailTeleport extends Fragment implements View.OnClickListener
 {
-	private class UpdateTelelportTask extends AsyncTask<Integer, Void, Boolean>
+	private long id;
+	private TitleSetter listener;
+	
+	
+	private class UpdateTelelportTask extends AsyncTask<Long, Void, Boolean>
 	{
-
-		//done on the background thread
+		ContentValues cv = new ContentValues();
+		//updating of favourites is done on the background thread
 		@Override
-		protected Boolean doInBackground(Integer... myInt)
+		protected Boolean doInBackground(Long... myLong)
 		{
 			try{
-				ContentValues cv = new ContentValues();
-				cv.put("FAVOURITES", true);
+				Long databaseId = myLong[0];
 				SQLiteDatabase db = (new TeleportDatabaseHelper(getContext())).getWritableDatabase();
 				db.update("DELIVERIES",
 						  cv,
 						  "_id = ?",
-						  new String[]{String.valueOf(id)});
-				
+						  new String[]{String.valueOf(databaseId)});
+				db.close();
+
 				return true;
 			}
 			catch (SQLiteException ex){
@@ -52,26 +63,24 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 		@Override
 		protected void onPreExecute()
 		{
-			// TODO: Implement this method
 			super.onPreExecute();
+			boolean isChecked = ((CheckBox) getView().findViewById(R.id.fragment_detail_teleportCheckBox)).isChecked();
+			cv.put("FAVOURITES", isChecked);
 		}
 
 		@Override
 		protected void onPostExecute(Boolean result)
 		{
-			// TODO: Implement this method
 			super.onPostExecute(result);
+			if (!result){
+				Toast error = Toast.makeText(getContext(), "Update of favourites failed", Toast.LENGTH_SHORT); 
+				error.show();
+			}
 		}
-		
-		
-		
-
-		
 		
 	}
 
-    private long id;
-	private TitleSetter listener;
+    
 	interface TitleSetter{
 		public void onTeleportSelected(String title);
 	}
@@ -114,7 +123,7 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 			SQLiteDatabase db = helper.getReadableDatabase();
 			//filter by promart kry_id = user selected id. 
 			Cursor cursor = db.query("DELIVERIES", 
-									 new String[]{"_id", "TITLE", "SEND_TO", "SENT_FROM","IMAGE_ID", "PACKAGE_WEIGHT"}, 
+									 new String[]{"_id", "TITLE", "SEND_TO", "SENT_FROM","IMAGE_ID", "PACKAGE_WEIGHT", "FAVOURITES"}, 
 									 "_id = ?",
 									 new String[]{String.valueOf(id)}, 
 									 null,
@@ -128,6 +137,7 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 				String sentFrom = cursor.getString(3);
 				int imgId = cursor.getInt(4);
 				float weight = cursor.getFloat(5);
+				boolean isFavourite = (1 == cursor.getInt(6));
 				//Gets root view
 				View rootView = getView();
 				if (rootView != null)
@@ -140,6 +150,8 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 					weightText.setText(String.valueOf(weight));
 					ImageView packageImage = (ImageView) rootView.findViewById(R.id.fragment_detail_package_image);
 					packageImage.setImageResource(imgId);
+					CheckBox favourite = (CheckBox) rootView.findViewById(R.id.fragment_detail_teleportCheckBox);
+					favourite.setChecked(isFavourite);
 					listener.onTeleportSelected(title);
 				} }}
 		catch (SQLiteException EX)
@@ -165,8 +177,7 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 	public void onClick(View p1)
 	{
 		//only checkbox button, call asyntask
-		
-		
+		new UpdateTelelportTask().execute(id);
 	}
 
 
