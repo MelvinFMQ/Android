@@ -29,6 +29,7 @@
 	<string-array
 		name="titles">
 		<item>Home</item>
+		<item>Favourite</item>
 		<item>Past Deliveries</item>
 	</string-array>
 </resources>

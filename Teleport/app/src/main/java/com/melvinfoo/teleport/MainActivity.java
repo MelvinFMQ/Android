@@ -26,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import android.app.FragmentManager;
 
 
+
 public class MainActivity extends Activity implements DeliveryListFragment.ListClicker,OnMapReadyCallback,DetailTeleport.TitleSetter
 {
 	private ShareActionProvider share;
@@ -145,8 +146,11 @@ public class MainActivity extends Activity implements DeliveryListFragment.ListC
 					 if (myFragment instanceof MapFragment){
 						 currentPosition = 0;
 					 }
-					 else {
+					 else if (myFragment instanceof FavouriteDeliveryListFragment){
 						 currentPosition = 1;
+					 }
+					 else{
+						 currentPosition = 2;
 					 }
 					 changeTitle(currentPosition);
 					 drawer.setItemChecked(currentPosition, true);
@@ -171,21 +175,23 @@ public class MainActivity extends Activity implements DeliveryListFragment.ListC
 	
 	private void selectFragment(int position){
 		currentPosition = position;
-		Fragment newContent = new DeliveryListFragment();
-		switch (position)
-		{
-			case 0:
+		Fragment newContent;
+		switch (position){
+			case 1:
+				//past deliveries 
+				newContent = new FavouriteDeliveryListFragment();
+				break;
+			
+			case 2:
+				newContent = new PastDeliveryListFragment();
+				break;
+			default:
 				MapFragment map = MapFragment.newInstance();
 				map.getMapAsync(this);
 				newContent = map;
 				break;
-			case 1:
-				//past deliveries 
-				newContent = new DeliveryListFragment();
-				break;
-			
-
 		}
+		
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.content, newContent, "visible fragment");
 		transaction.addToBackStack(null);
@@ -247,6 +253,7 @@ public class MainActivity extends Activity implements DeliveryListFragment.ListC
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 	}
 
+	
 	@Override
 	public void onTeleportSelected(String title)
 	{

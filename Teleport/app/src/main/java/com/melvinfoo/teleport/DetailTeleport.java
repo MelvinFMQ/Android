@@ -65,7 +65,7 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 		{
 			super.onPreExecute();
 			boolean isChecked = ((CheckBox) getView().findViewById(R.id.fragment_detail_teleportCheckBox)).isChecked();
-			cv.put("FAVOURITES", isChecked);
+			cv.put("FAVOURITE", isChecked);
 		}
 
 		@Override
@@ -123,7 +123,7 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 			SQLiteDatabase db = helper.getReadableDatabase();
 			//filter by promart kry_id = user selected id. 
 			Cursor cursor = db.query("DELIVERIES", 
-									 new String[]{"_id", "TITLE", "SEND_TO", "SENT_FROM","IMAGE_ID", "PACKAGE_WEIGHT", "FAVOURITES"}, 
+									 new String[]{"_id", "TITLE", "SEND_TO", "SENT_FROM","IMAGE_ID", "PACKAGE_WEIGHT", "FAVOURITE"}, 
 									 "_id = ?",
 									 new String[]{String.valueOf(id)}, 
 									 null,

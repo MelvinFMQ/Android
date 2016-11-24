@@ -22,11 +22,14 @@ import android.widget.Toast;
  * A simple {@link Fragment} subclass.
  */
 
-public class DeliveryListFragment extends ListFragment
+public abstract class DeliveryListFragment extends ListFragment
  {
 	private SQLiteDatabase db;
 	private Cursor cursor; 
+
 	
+	public abstract String getFilter()
+	public abstract String getFilterValue()
     interface ListClicker{
         public void onItemClick(long id);
     }
@@ -41,6 +44,7 @@ public class DeliveryListFragment extends ListFragment
         listener = (ListClicker) activity;
     }
 
+	
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +52,22 @@ public class DeliveryListFragment extends ListFragment
 		try{ 
 			TeleportDatabaseHelper 	helper = new TeleportDatabaseHelper(inflater.getContext());
 			db = helper.getReadableDatabase();
-			cursor = db.query("DELIVERIES", new String[]{"_id", "TITLE"}, null, null, null, null, null);
+			//there is a filter 
+			String filter = getFilter();
+			String filterValue = getFilterValue();
+			if (filter != null){
+				cursor = db.query("DELIVERIES", 
+									new String[]{"_id", 
+									  "TITLE"}, filter + " = ?",
+									new String[]{filterValue}, 
+									null, null, null);
+			}
+			else{
+				//no filter
+				cursor = db.query("DELIVERIES", 
+								  new String[]{"_id", "TITLE"},
+								  null, null, null, null, null);
+			}
 			//2nd parameter is the format the text will places in 
 			//4th parameter is the text view the data will be plsced in.
 			CursorAdapter adapter = new SimpleCursorAdapter(inflater.getContext(), android.R.layout.simple_list_item_1, cursor, new String[]{"TITLE"}, new int[]{android.R.id.text1}, 0);
