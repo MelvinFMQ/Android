@@ -6,7 +6,7 @@ import android.content.Context;
 public class TeleportDatabaseHelper extends SQLiteOpenHelper
 {
 	private static final String DB_NAME = "teleport";
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 2;
 	
 	TeleportDatabaseHelper(Context c){
 		super(c, DB_NAME, null ,DB_VERSION);
@@ -26,9 +26,11 @@ public class TeleportDatabaseHelper extends SQLiteOpenHelper
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase p1, int p2, int p3)
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
-		// TODO: Implement this method
+		if (oldVersion < 2){
+			db.execSQL("ALTER TABLE DELIVERIES ADD COLUMN FAVOURITE NUMERIC");
+		}
 	}
 
 

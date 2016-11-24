@@ -14,14 +14,61 @@ import com.melvinfoo.teleport.TeleportDatabaseHelper;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.content.ContentValues;
 import android.widget.Toast;
-
+import android.os.AsyncTask;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailTeleport extends Fragment
+
+public class DetailTeleport extends Fragment implements View.OnClickListener
 {
+	private class UpdateTelelportTask extends AsyncTask<Integer, Void, Boolean>
+	{
+
+		//done on the background thread
+		@Override
+		protected Boolean doInBackground(Integer... myInt)
+		{
+			try{
+				ContentValues cv = new ContentValues();
+				cv.put("FAVOURITES", true);
+				SQLiteDatabase db = (new TeleportDatabaseHelper(getContext())).getWritableDatabase();
+				db.update("DELIVERIES",
+						  cv,
+						  "_id = ?",
+						  new String[]{String.valueOf(id)});
+				
+				return true;
+			}
+			catch (SQLiteException ex){
+				return false;
+			}
+			
+		}
+
+		//done on tbe main thread. have access to gui 
+		@Override
+		protected void onPreExecute()
+		{
+			// TODO: Implement this method
+			super.onPreExecute();
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result)
+		{
+			// TODO: Implement this method
+			super.onPostExecute(result);
+		}
+		
+		
+		
+
+		
+		
+	}
 
     private long id;
 	private TitleSetter listener;
@@ -51,7 +98,11 @@ public class DetailTeleport extends Fragment
         if (savedInstanceState != null){
             id = savedInstanceState.getLong("id");
         }
-        return inflater.inflate(R.layout.fragment_detail_teleport, container, false);
+		//root view 
+        View layout =inflater.inflate(R.layout.fragment_detail_teleport, container, false);
+		//set favourites checkbox to repspnd to clicks 
+		layout.findViewById(R.id.fragment_detail_teleportCheckBox).setOnClickListener(this);
+		return layout;
     }
     @Override
     public void onStart(){
@@ -107,6 +158,18 @@ public class DetailTeleport extends Fragment
         savedInstanceState.putLong("id", id);
 
     }
+	
+	//Overrriden frok view.onclickListener
+
+	@Override
+	public void onClick(View p1)
+	{
+		//only checkbox button, call asyntask
+		
+		
+	}
+
+
 
 
 }
