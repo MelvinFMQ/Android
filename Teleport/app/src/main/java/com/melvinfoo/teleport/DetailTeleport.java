@@ -23,11 +23,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.content.ContentValues;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
-
+//Service 
+import android.content.Intent;
+import android.util.Log;
 
 public class DetailTeleport extends Fragment implements View.OnClickListener
 {
@@ -111,6 +109,7 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
         View layout =inflater.inflate(R.layout.fragment_detail_teleport, container, false);
 		//set favourites checkbox to repspnd to clicks 
 		layout.findViewById(R.id.fragment_detail_teleportCheckBox).setOnClickListener(this);
+		layout.findViewById(R.id.fragment_detail_teleportButton).setOnClickListener(this);
 		return layout;
     }
     @Override
@@ -118,6 +117,7 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
         super.onStart();
 		try
 		{
+			Log.v("Service", "at onStart");
 			TeleportDatabaseHelper helper = new TeleportDatabaseHelper(getContext());
 			//use rradable incase writable is unavaliable (due to insufficient storage)
 			SQLiteDatabase db = helper.getReadableDatabase();
@@ -176,11 +176,16 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 	@Override
 	public void onClick(View p1)
 	{
-		//only checkbox button, call asyntask
-		new UpdateTelelportTask().execute(id);
+		Log.v("Service", "at button Clikc");
+		//calls service
+		if(p1.getId() == R.id.fragment_detail_teleportButton){
+			Log.v("Service", "at if");
+			Intent service = new Intent(getContext(),NotificationService.class);
+			getContext().startService(service); 
+		}
+		else{
+			//checkbox button, call asyntask
+			new UpdateTelelportTask().execute(id);
+		}
 	}
-
-
-
-
 }
