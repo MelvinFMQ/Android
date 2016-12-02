@@ -27,10 +27,43 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.util.Log;
 
+//location service 
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.content.ComponentName;
+import android.os.Handler;
+
+
+
 public class DetailTeleport extends Fragment implements View.OnClickListener
 {
 	private long id;
 	private TitleSetter listener;
+	
+	//location service
+	private double totalMeters =0;
+	private OdometerService odometer;
+	private boolean bound;
+	private ServiceConnection connection = new ServiceConnection(){
+
+		@Override
+		public void onServiceConnected(ComponentName p1, IBinder binder)
+		{
+			OdometerService.OdometerBinder odometerBinder = (OdometerService.OdometerBinder) binder;
+			Log.v("Odometer", "in service connected");
+			odometer = odometerBinder.getOdometer();
+			bound = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName p1)
+		{
+			bound = false;
+		}
+
+
+		
+	};
 	
 	
 	private class UpdateTelelportTask extends AsyncTask<Long, Void, Boolean>
@@ -96,6 +129,25 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 		
 		
 	}
+	
+	//odometer service
+	void watchMillage(){
+		final Handler handle = new Handler();
+		handle.post(new Runnable(){
+				@Override
+				public void run(){
+					TextView odometerView = (TextView) getView().findViewById(R.id.fragment_detail_teleport_odometer);
+					if (odometer != null){
+						totalMeters = totalMeters +odometer.getMiles();
+						odometerView.setText(String.valueOf(totalMeters));
+						}
+					//this refers to the new runnable object
+					//calls the same handler s dont need to recreste a new handler 
+					handle.postDelayed(this, 1000);
+					};
+				}
+			);
+	}
 
 	
     @Override
@@ -159,11 +211,29 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 			Toast error = Toast.makeText(getContext(), "database unavailable", Toast.LENGTH_SHORT);
 			error.show();
 		}
+		
+		//odometer service
+		Intent intent = new Intent(getContext(), OdometerService.class);
+		getContext().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+		watchMillage();
+	
 
     }
     public void setDeliveryID(long id) {
         this.id = id;
     }
+
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		if (bound){
+			getContext().unbindService(connection);
+			bound = false;
+		}
+	}
+	
+	
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
@@ -182,6 +252,7 @@ public class DetailTeleport extends Fragment implements View.OnClickListener
 			Log.v("Service", "at if");
 			Intent service = new Intent(getContext(),NotificationService.class);
 			getContext().startService(service); 
+			
 		}
 		else{
 			//checkbox button, call asyntask

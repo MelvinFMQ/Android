@@ -10,8 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import com.melvinfoo.teleport.TeleportDatabaseHelper;
 import android.database.sqlite.SQLiteDatabase;
-
-;public class CreateDeliveryActivity extends Activity
+public class CreateDeliveryActivity extends Activity
 {
 
 	@Override
@@ -23,6 +22,8 @@ import android.database.sqlite.SQLiteDatabase;
 		//ActionBar myActionBar = getActionBar();
 		//myActionBar.setDisplayHomeAsUpEnabled(true);
 	}
+	
+	
 
 	public void onSubmitClick(View button){
 		String title = ((EditText) findViewById(R.id.create_order_title)).getText().toString();
