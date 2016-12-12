@@ -2,14 +2,17 @@ package com.melvinfoo.teleport;
 
 import java.net.URL;
 import java.net.MalformedURLException;
-//whne url is not correctly formed
+//when url is not correctly formed
 import java.net.HttpURLConnection;
-//url.oOpenConnectioj might throw an exception when it cant get an connection object 
+//url.openConnection might throw an exception when it cant get an connection object 
 import java.io.IOException;
 import java.io.BufferedInputStream;
-
+import java.io.InputStream;
 
 import android.util.Log;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+
 public class HTTPHandler
 {
 	//URL is a string that describes hoe to get a resourse over the internet 
@@ -20,8 +23,9 @@ public class HTTPHandler
 			//openConnection returns an URLConnection, need to csst it to the subclass of it 
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
-			BufferedInputStream in = new BufferedInputStream(connection.getInputStream());
-			response = convertToString(in);
+			InputStream in = new BufferedInputStream(connection.getInputStream());
+			//response = convertToString(in);
+			response = convertStreamToString(in);
 			}
 		catch(MalformedURLException ex){
 			ex.printStackTrace();
@@ -29,10 +33,33 @@ public class HTTPHandler
 		catch(IOException ex){
 			ex.printStackTrace();
 		}
-		return response;
-		
+		finally{
+			return response;
+			}
 	}
 	
+	public String convertStreamToString(InputStream is){
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+		String line;
+		try {
+			while ((line = reader.readLine()) != null){
+				sb.append(line);
+			}
+		} catch (IOException ex){
+			ex.printStackTrace();
+		}
+		finally{
+			try{
+				is.close();
+			}catch(IOException ex){
+				ex.printStackTrace();
+			}
+			Log.v("autocomplete", "in convertStreamToString");
+			Log.v("autocomplete", sb.toString());
+			return sb.toString();
+		}
+	}
 	public String convertToString(BufferedInputStream in){
 		//BufferedInputString read writes into the byte buffer given to it
 		byte[] byteBuffer= new byte[1024];
@@ -54,7 +81,8 @@ public class HTTPHandler
 				ex.printStackTrace();
 			}
 		}
-		Log.v("Response", response);
+		Log.v("autocompelte", "in httphandler");
+		Log.v("autocomplete", response);
 		return response;
 	}
 }
